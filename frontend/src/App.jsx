@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Blog from "./components/Blog";
+import Notification from "./components/Notification";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 
@@ -11,6 +12,10 @@ const App = () => {
   const [blogTitle, setBlogTitle] = useState("");
   const [blogAuthor, setBlogAuthor] = useState("");
   const [blogUrl, setBlogUrl] = useState("");
+  const [notification, setNotification] = useState({
+    message: null,
+    isError: false,
+  });
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -35,8 +40,22 @@ const App = () => {
       setUser(user);
       setUsername("");
       setPassword("");
-    } catch (error) {
-      console.error(error);
+
+      setNotification({
+        message: "Successfully Logged in",
+        isError: false,
+      });
+      setTimeout(() => {
+        setNotification({ message: null, isError: false });
+      }, 5000);
+    } catch {
+      setNotification({
+        message: "Wrong credentials",
+        isError: true,
+      });
+      setTimeout(() => {
+        setNotification({ message: null, isError: false });
+      }, 5000);
     }
   };
 
@@ -44,6 +63,14 @@ const App = () => {
     window.localStorage.removeItem("loggedBlogappUser");
     setUser(null);
     blogService.setToken(null);
+
+    setNotification({
+      message: "Successfully Logged out",
+      isError: false,
+    });
+    setTimeout(() => {
+      setNotification({ message: null, isError: false });
+    }, 5000);
   };
 
   const handleBlogSubmit = async (event) => {
@@ -62,8 +89,21 @@ const App = () => {
       setBlogUrl("");
 
       setBlogs(blogs.concat(returnedBlog));
+      setNotification({
+        message: `A new blog "${returnedBlog.title}" by "${returnedBlog.author}" added!`,
+        isError: false,
+      });
+      setTimeout(() => {
+        setNotification({ message: null, isError: false });
+      }, 5000);
     } catch (error) {
-      console.error(error);
+      setNotification({
+        message: `${error}`,
+        isError: true,
+      });
+      setTimeout(() => {
+        setNotification({ message: null, isError: false });
+      }, 5000);
     }
   };
 
@@ -140,6 +180,7 @@ const App = () => {
 
   return (
     <>
+      <Notification {...notification} />
       {!user && loginForm()}
       {user && (
         <>
