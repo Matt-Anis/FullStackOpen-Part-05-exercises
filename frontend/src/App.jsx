@@ -8,6 +8,9 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [blogTitle, setBlogTitle] = useState("");
+  const [blogAuthor, setBlogAuthor] = useState("");
+  const [blogUrl, setBlogUrl] = useState("");
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -37,10 +40,31 @@ const App = () => {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     window.localStorage.removeItem("loggedBlogappUser");
     setUser(null);
     blogService.setToken(null);
+  };
+
+  const handleBlogSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const newBlog = {
+        title: blogTitle,
+        author: blogAuthor,
+        url: blogUrl,
+      };
+      const returnedBlog = await blogService.create(newBlog);
+
+      setBlogAuthor("");
+      setBlogTitle("");
+      setBlogUrl("");
+
+      setBlogs(blogs.concat(returnedBlog));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const loginForm = () => (
@@ -81,10 +105,48 @@ const App = () => {
     </div>
   );
 
+  const blogForm = () => (
+    <div>
+      <h2>Add blog</h2>
+      <form onSubmit={handleBlogSubmit}>
+        <label>
+          Title
+          <input
+            type="text"
+            value={blogTitle}
+            onChange={({ target }) => setBlogTitle(target.value)}
+          />
+        </label>
+        <label>
+          Author
+          <input
+            type="text"
+            value={blogAuthor}
+            onChange={({ target }) => setBlogAuthor(target.value)}
+          />
+        </label>
+        <label>
+          URL
+          <input
+            type="url"
+            value={blogUrl}
+            onChange={({ target }) => setBlogUrl(target.value)}
+          />
+        </label>
+        <button type="submit">Add</button>
+      </form>
+    </div>
+  );
+
   return (
     <>
       {!user && loginForm()}
-      {user && blogList()}
+      {user && (
+        <>
+          {blogForm()}
+          {blogList()}
+        </>
+      )}
     </>
   );
 };
