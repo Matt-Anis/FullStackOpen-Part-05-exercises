@@ -119,6 +119,30 @@ const App = () => {
     }
   };
 
+  const handleBlogDelete = async (id) => {
+    try {
+      await blogService.deleteBlog(id);
+      setBlogs(blogs.filter((blog) => blog.id !== id));
+
+      setNotification({
+        message: `Blog successfully deleted`,
+        isError: false,
+      });
+
+      setTimeout(() => {
+        setNotification({ message: null, isError: false });
+      }, 5000);
+    } catch (error) {
+      setNotification({
+        message: `${error}`,
+        isError: true,
+      });
+      setTimeout(() => {
+        setNotification({ message: null, isError: false });
+      }, 5000);
+    }
+  };
+
   const loginForm = () => (
     <Togglable buttonLabel="login">
       <LoginForm login={handleLogin} />
@@ -133,7 +157,12 @@ const App = () => {
       {blogs
         .toSorted((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <Blog key={blog.id} blog={blog} like={incrementLike} />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            like={incrementLike}
+            deleteBlog={handleBlogDelete}
+          />
         ))}
     </div>
   );

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Blog = ({ blog, like }) => {
+const Blog = ({ blog, like, deleteBlog }) => {
   const [expanded, setExpanded] = useState(false);
 
   const blogStyle = {
@@ -17,6 +17,13 @@ const Blog = ({ blog, like }) => {
     await like(blog.id, { ...blog, likes: blog.likes + 1 });
   };
 
+  const handleDeleteBlog = async () => {
+    if (!window.confirm(`Delete ${blog.title} by ${blog.author}`)) {
+      return;
+    }
+    await deleteBlog(blog.id);
+  };
+
   return (
     <div style={blogStyle}>
       {blog.title}
@@ -31,6 +38,7 @@ const Blog = ({ blog, like }) => {
           Likes: {blog.likes}
           <button onClick={handleLike}>like</button>
           <p>{blog.author}</p>
+          <button onClick={handleDeleteBlog}>Delete</button>
         </div>
       )}
     </div>
