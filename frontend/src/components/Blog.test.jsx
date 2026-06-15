@@ -39,3 +39,25 @@ test("<Blog /> shows likes, url, and author when button is clicked", async () =>
   expect(title).toBeVisible();
   expect(author).toBeVisible();
 });
+
+test("<Blog /> when like clicked twice, the two calls are recorded", async () => {
+  const blog = {
+    author: "me",
+    title: "only the title should be visible",
+    likes: 1,
+    url: "https://example.com",
+  };
+  const mockHandler = vi.fn();
+
+  render(<Blog blog={blog} like={mockHandler} />);
+
+  const user = userEvent.setup();
+  const viewButton = screen.getByText("view");
+  await user.click(viewButton);
+  const likeButton = screen.getByText("like");
+
+  await user.click(likeButton);
+  await user.click(likeButton);
+
+  expect(mockHandler.mock.calls).toHaveLength(2);
+});
