@@ -130,9 +130,11 @@ const App = () => {
       <h2>blogs</h2>
       <p>{user.name} logged in</p>
       <button onClick={handleLogout}>log out</button>
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} like={incrementLike} />
-      ))}
+      {blogs
+        .toSorted((a, b) => b.likes - a.likes)
+        .map((blog) => (
+          <Blog key={blog.id} blog={blog} like={incrementLike} />
+        ))}
     </div>
   );
 

@@ -23,7 +23,11 @@ const Blog = ({ blog, like }) => {
       <button onClick={toggleExpand}>view</button>
       {expanded && (
         <div>
-          <p>{blog.url}</p>
+          <p>
+            <a href={blog.url} target="_blank" rel="noopener noreferrer">
+              {blog.url}
+            </a>
+          </p>
           Likes: {blog.likes}
           <button onClick={handleLike}>like</button>
           <p>{blog.author}</p>
