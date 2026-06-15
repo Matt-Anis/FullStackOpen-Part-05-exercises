@@ -69,6 +69,30 @@ const App = () => {
     }, 5000);
   };
 
+  const incrementLike = async (id, newBlog) => {
+    try {
+      const response = await blogService.update(id, newBlog);
+      setBlogs(blogs.map((blog) => (blog.id !== id ? blog : response.data)));
+      setNotification({
+        message: "Successfully Liked the blog!",
+        isError: false,
+      });
+      setTimeout(() => {
+        setNotification({ message: null, isError: false });
+      }, 5000);
+    } catch (error) {
+      setNotification({
+        message: error,
+        isError: true,
+      });
+      setTimeout(() => {
+        setTimeout(() => {
+          setNotification({ message: null, isError: false });
+        }, 5000);
+      });
+    }
+  };
+
   const handleBlogSubmit = async (blogObject) => {
     try {
       const returnedBlog = await blogService.create(blogObject);
@@ -107,7 +131,7 @@ const App = () => {
       <p>{user.name} logged in</p>
       <button onClick={handleLogout}>log out</button>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} like={incrementLike} />
       ))}
     </div>
   );

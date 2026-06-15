@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, like }) => {
   const [expanded, setExpanded] = useState(false);
 
   const blogStyle = {
@@ -13,7 +13,9 @@ const Blog = ({ blog }) => {
 
   const toggleExpand = () => setExpanded(!expanded);
 
-  const like = () => {};
+  const handleLike = async () => {
+    await like(blog.id, { ...blog, likes: blog.likes + 1 });
+  };
 
   return (
     <div style={blogStyle}>
@@ -23,7 +25,7 @@ const Blog = ({ blog }) => {
         <div>
           <p>{blog.url}</p>
           Likes: {blog.likes}
-          <button onClick={like}>like</button>
+          <button onClick={handleLike}>like</button>
           <p>{blog.author}</p>
         </div>
       )}
