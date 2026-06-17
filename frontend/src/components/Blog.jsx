@@ -26,7 +26,7 @@ const Blog = ({ blog, like, deleteBlog }) => {
 
   return (
     <div style={blogStyle}>
-      {blog.title}
+      <div data-testid="blog-title">{blog.title}</div>
       <button onClick={toggleExpand}>view</button>
       {expanded && (
         <div>

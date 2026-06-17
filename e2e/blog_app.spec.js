@@ -1,5 +1,5 @@
 const { test, expect, beforeEach, describe } = require("@playwright/test");
-const { loginWith } = require("./helper");
+const { loginWith, createBlog } = require("./helper");
 
 describe("Blog app", () => {
   beforeEach(async ({ page, request }) => {
@@ -29,5 +29,18 @@ describe("Blog app", () => {
   test("login fails with wrong credentials", async ({ page }) => {
     await loginWith(page, "mattanis", "wrong");
     await expect(page.getByText("wrong credentials")).toBeVisible();
+  });
+
+  describe("when logged in", () => {
+    beforeEach(async ({ page }) => {
+      await loginWith(page, "mattanis", "secret");
+    });
+
+    test("a blog can be created", async ({ page }) => {
+      await createBlog(page, "Test Blog", "Test Author", "https://test.com");
+      await expect(
+        page.getByTestId("blog-title").filter({ hasText: "Test Blog" }),
+      ).toBeVisible();
+    });
   });
 });
