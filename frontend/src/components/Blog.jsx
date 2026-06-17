@@ -25,8 +25,8 @@ const Blog = ({ blog, like, deleteBlog }) => {
   };
 
   return (
-    <div style={blogStyle}>
-      <div data-testid="blog-title">{blog.title}</div>
+    <div data-testid="blog-container" style={blogStyle}>
+      <span>{blog.title}</span>
       <button onClick={toggleExpand}>view</button>
       {expanded && (
         <div>

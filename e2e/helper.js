@@ -11,7 +11,7 @@ const createBlog = async (page, title, author, url) => {
   await page.getByRole("textbox", { name: "Author" }).fill(author);
   await page.getByRole("textbox", { name: "URL" }).fill(url);
   await page.getByRole("button", { name: "Add" }).click();
-  await page.getByTestId("blog-title").filter({ hasText: title }).waitFor();
+  await page.getByTestId("blog-container").filter({ hasText: title }).waitFor();
 };
 
 export { loginWith, createBlog };
