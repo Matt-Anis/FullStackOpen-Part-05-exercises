@@ -57,6 +57,21 @@ describe("Blog app", () => {
         await blog.getByRole("button", { name: "like" }).click();
         await expect(blog.getByText("Likes: 1")).toBeVisible();
       });
+
+      test("a blog can be deleted by the creator", async ({ page }) => {
+        page.on("dialog", async (dialog) => {
+          expect(dialog.type()).toContain("confirm");
+          expect(dialog.message()).toContain("Delete First Blog by Author 1");
+
+          await dialog.accept();
+        });
+        const blog = page
+          .getByTestId("blog-container")
+          .filter({ hasText: "First Blog" });
+        await blog.getByRole("button", { name: "view" }).click();
+        await blog.getByRole("button", { name: "Delete" }).click();
+        await expect(blog).not.toBeVisible();
+      });
     });
   });
 });
