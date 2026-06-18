@@ -1,9 +1,8 @@
 const { test, expect, beforeEach, describe } = require("@playwright/test");
-const { loginWith, createBlog } = require("./helper");
+const { loginWith, createBlog, likeBlog } = require("./helper");
 
 describe("Blog app", () => {
   beforeEach(async ({ page, request }) => {
-    await page.goto("http://localhost:5173");
     await request.post("/api/testing/reset");
     await request.post("/api/users", {
       data: {
@@ -12,6 +11,8 @@ describe("Blog app", () => {
         password: "secret",
       },
     });
+
+    await page.goto("http://localhost:5173");
   });
 
   test("Login form is shown", async ({ page }) => {
@@ -71,6 +72,30 @@ describe("Blog app", () => {
         await blog.getByRole("button", { name: "view" }).click();
         await blog.getByRole("button", { name: "Delete" }).click();
         await expect(blog).not.toBeVisible();
+      });
+
+      test("the blogs are ordered according to likes with the blog with the most likes being first", async ({
+        page,
+      }) => {
+        const firstBlog = page
+          .getByTestId("blog-container")
+          .filter({ hasText: "First Blog" });
+        const secondBlog = page
+          .getByTestId("blog-container")
+          .filter({ hasText: "Second Blog" });
+
+        await firstBlog.getByRole("button", { name: "view" }).click();
+        await likeBlog(firstBlog, 1);
+
+        const topBlog = page.getByTestId("blog-container").first();
+        await expect(topBlog).toContainText("First Blog");
+
+        await secondBlog.getByRole("button", { name: "view" }).click();
+        await likeBlog(secondBlog, 1);
+        await likeBlog(secondBlog, 2);
+
+        const newTopBlog = page.getByTestId("blog-container").first();
+        await expect(newTopBlog).toContainText("Second Blog");
       });
     });
   });
