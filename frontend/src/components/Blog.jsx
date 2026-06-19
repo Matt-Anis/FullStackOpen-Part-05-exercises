@@ -1,4 +1,6 @@
-const Blog = ({ blog, like, deleteBlog }) => {
+import { useEffect } from 'react'
+
+const Blog = ({ user, blog, like, deleteBlog }) => {
   const handleLike = async () => {
     await like(blog.id, { likes: blog.likes + 1 })
   }
@@ -19,9 +21,11 @@ const Blog = ({ blog, like, deleteBlog }) => {
         </a>
       </p>
       Likes: {blog.likes}
-      <button onClick={handleLike}>like</button>
+      {user && <button onClick={handleLike}>like</button>}
       <p>{blog.author}</p>
-      <button onClick={handleDeleteBlog}>Remove</button>
+      {user?.username === blog.user.username && (
+        <button onClick={handleDeleteBlog}>Remove</button>
+      )}
     </div>
   )
 }

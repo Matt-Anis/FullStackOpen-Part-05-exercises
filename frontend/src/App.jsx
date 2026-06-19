@@ -9,7 +9,6 @@ import {
 } from 'react-router-dom'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import Togglable from '../../../examples/frontend/src/components/Togglable'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
@@ -87,8 +86,7 @@ const App = () => {
       const returnedBlog = await blogService.create(blogObject)
 
       setBlogs(blogs.concat(returnedBlog))
-      blogFormRef.current.toggleVisibility()
-
+      navigate('/')
       setNotification({
         message: `A new blog "${returnedBlog.title}" by "${returnedBlog.author}" added!`,
         isError: false,
@@ -97,7 +95,6 @@ const App = () => {
       setTimeout(() => {
         setNotification({ message: null, isError: false })
       }, 5000)
-      navigate('/')
     } catch (error) {
       setNotification({
         message: `${error}`,
@@ -126,10 +123,8 @@ const App = () => {
         isError: true,
       })
       setTimeout(() => {
-        setTimeout(() => {
-          setNotification({ message: null, isError: false })
-        }, 5000)
-      })
+        setNotification({ message: null, isError: false })
+      }, 5000)
     }
   }
 
@@ -156,12 +151,6 @@ const App = () => {
       }, 5000)
     }
   }
-
-  const blogForm = () => (
-    <Togglable buttonLabel="Add blog" ref={blogFormRef}>
-      <BlogForm createBlog={handleBlogSubmit} />
-    </Togglable>
-  )
 
   const padding = {
     padding: 5,
@@ -211,6 +200,7 @@ const App = () => {
                 blog={blog}
                 deleteBlog={handleBlogDelete}
                 like={incrementLike}
+                user={user}
               />
             ) : (
               <Navigate replace to="/" />
@@ -231,5 +221,4 @@ const App = () => {
     </div>
   )
 }
-
 export default App
