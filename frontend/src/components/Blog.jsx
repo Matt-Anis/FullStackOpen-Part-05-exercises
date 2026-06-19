@@ -1,18 +1,4 @@
-import { useState } from 'react'
-
 const Blog = ({ blog, like, deleteBlog }) => {
-  const [expanded, setExpanded] = useState(false)
-
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  }
-
-  const toggleExpand = () => setExpanded(!expanded)
-
   const handleLike = async () => {
     await like(blog.id, { likes: blog.likes + 1 })
   }
@@ -25,22 +11,17 @@ const Blog = ({ blog, like, deleteBlog }) => {
   }
 
   return (
-    <div data-testid="blog-container" style={blogStyle}>
-      <span>{blog.title}</span>
-      <button onClick={toggleExpand}>view</button>
-      {expanded && (
-        <div>
-          <p>
-            <a href={blog.url} target="_blank" rel="noopener noreferrer">
-              {blog.url}
-            </a>
-          </p>
-          Likes: {blog.likes}
-          <button onClick={handleLike}>like</button>
-          <p>{blog.author}</p>
-          <button onClick={handleDeleteBlog}>Delete</button>
-        </div>
-      )}
+    <div data-testid="blog-container">
+      <h2>{blog.title}</h2>
+      <p>
+        <a href={blog.url} target="_blank" rel="noopener noreferrer">
+          {blog.url}
+        </a>
+      </p>
+      Likes: {blog.likes}
+      <button onClick={handleLike}>like</button>
+      <p>{blog.author}</p>
+      <button onClick={handleDeleteBlog}>Remove</button>
     </div>
   )
 }
