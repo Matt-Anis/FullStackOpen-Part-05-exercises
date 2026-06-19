@@ -1,6 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link, Route, Routes, Navigate, useMatch } from 'react-router-dom'
-import Notification from './components/Notification'
+import {
+  Link,
+  Route,
+  Routes,
+  Navigate,
+  useMatch,
+  useNavigate,
+} from 'react-router-dom'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Togglable from '../../../examples/frontend/src/components/Togglable'
@@ -16,6 +22,7 @@ const App = () => {
     message: null,
     isError: false,
   })
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -75,7 +82,6 @@ const App = () => {
     }, 5000)
   }
 
-  // TODO: will be refactored later into the blog form component
   const handleBlogSubmit = async (blogObject) => {
     try {
       const returnedBlog = await blogService.create(blogObject)
@@ -91,6 +97,7 @@ const App = () => {
       setTimeout(() => {
         setNotification({ message: null, isError: false })
       }, 5000)
+      navigate('/')
     } catch (error) {
       setNotification({
         message: `${error}`,
