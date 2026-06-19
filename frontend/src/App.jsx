@@ -170,9 +170,14 @@ const App = () => {
           blogs
         </Link>
         {user ? (
-          <button style={padding} onClick={handleLogout}>
-            logout
-          </button>
+          <>
+            <Link style={padding} to="/create">
+              new blog
+            </Link>
+            <button style={padding} onClick={handleLogout}>
+              logout
+            </button>
+          </>
         ) : (
           <Link style={padding} to="/login">
             login
@@ -200,6 +205,16 @@ const App = () => {
                 deleteBlog={handleBlogDelete}
                 like={incrementLike}
               />
+            ) : (
+              <Navigate replace to="/" />
+            )
+          }
+        />
+        <Route
+          path="/create"
+          element={
+            user ? (
+              <BlogForm createBlog={handleBlogSubmit} />
             ) : (
               <Navigate replace to="/" />
             )
