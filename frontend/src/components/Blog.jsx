@@ -1,28 +1,28 @@
-import { useState } from "react";
+import { useState } from 'react'
 
 const Blog = ({ blog, like, deleteBlog }) => {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false)
 
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
-    border: "solid",
+    border: 'solid',
     borderWidth: 1,
     marginBottom: 5,
-  };
+  }
 
-  const toggleExpand = () => setExpanded(!expanded);
+  const toggleExpand = () => setExpanded(!expanded)
 
   const handleLike = async () => {
-    await like(blog.id, { ...blog, likes: blog.likes + 1 });
-  };
+    await like(blog.id, { likes: blog.likes + 1 })
+  }
 
   const handleDeleteBlog = async () => {
     if (!window.confirm(`Delete ${blog.title} by ${blog.author}`)) {
-      return;
+      return
     }
-    await deleteBlog(blog.id);
-  };
+    await deleteBlog(blog.id)
+  }
 
   return (
     <div data-testid="blog-container" style={blogStyle}>
@@ -42,7 +42,7 @@ const Blog = ({ blog, like, deleteBlog }) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Blog;
+export default Blog
