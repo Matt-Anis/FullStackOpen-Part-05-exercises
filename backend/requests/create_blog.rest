@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFuaXMiLCJpZCI6IjZhMzU2ODZlNTc4YzU2MjY4NWQyMjllYSIsImlhdCI6MTc4MTg4NTU3MCwiZXhwIjoxNzgxODg5MTcwfQ.sqbXKua8r9FvZMIaezieva-FBnkgYiGCdr0BY0_KjZo
+
+{
+    "title": "an other test blog",
+    "author": "Anis",
+    "url": "https://example.com",
+    "user": "6a333eccf8f74f124ecfba8c"
+}
