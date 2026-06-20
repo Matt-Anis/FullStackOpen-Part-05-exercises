@@ -1,41 +1,49 @@
-import { useState } from "react";
+import { useState } from 'react'
+import { Button, TextField, Container } from '@mui/material'
 
 const LoginForm = ({ login }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show)
 
   const handleLogin = (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
-    login({ username, password });
-  };
+    login({ username, password })
+  }
 
+  const style = {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1rem',
+    marginTop: '2rem',
+  }
   return (
-    <div>
+    <Container>
       <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <label>
-          username
-          <input
-            type="text"
-            required={true}
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </label>
-        <label>
-          password
-          <input
-            type="password"
-            required={true}
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </label>
-        <button type="submit">Login</button>
+      <form style={style} onSubmit={handleLogin}>
+        <TextField
+          required
+          label="username"
+          variant="outlined"
+          value={username}
+          onChange={({ target }) => setUsername(target.value)}
+        />
+        <TextField
+          type="password"
+          label="password"
+          variant="outlined"
+          value={password}
+          onChange={({ target }) => setPassword(target.value)}
+        />
+        <Button variant="contained" type="submit">
+          login
+        </Button>
       </form>
-    </div>
-  );
-};
+    </Container>
+  )
+}
 
-export default LoginForm;
+export default LoginForm

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Button, TextField, Container } from '@mui/material'
 
 const BlogForm = ({ createBlog }) => {
   const [title, setTitle] = useState('')
@@ -14,37 +15,43 @@ const BlogForm = ({ createBlog }) => {
     setUrl('')
   }
 
+  const style = {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1rem',
+    marginTop: '2rem',
+  }
   return (
-    <div>
+    <Container>
       <h2>Add blog</h2>
-      <form onSubmit={handleBlogSubmit}>
-        <label>
-          Title
-          <input
-            type="text"
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
-          />
-        </label>
-        <label>
-          Author
-          <input
-            type="text"
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-          />
-        </label>
-        <label>
-          URL
-          <input
-            type="url"
-            value={url}
-            onChange={({ target }) => setUrl(target.value)}
-          />
-        </label>
-        <button type="submit">Add</button>
+      <form style={style} onSubmit={handleBlogSubmit}>
+        <TextField
+          label="Title"
+          variant="outlined"
+          value={title}
+          onChange={({ target }) => setTitle(target.value)}
+        />
+
+        <TextField
+          label="Author"
+          variant="outlined"
+          value={author}
+          onChange={({ target }) => setAuthor(target.value)}
+        />
+
+        <TextField
+          label="URL"
+          variant="outlined"
+          type="url"
+          value={url}
+          onChange={({ target }) => setUrl(target.value)}
+        />
+
+        <Button variant="contained" type="submit">
+          Add
+        </Button>
       </form>
-    </div>
+    </Container>
   )
 }
 

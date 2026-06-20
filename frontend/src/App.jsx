@@ -7,20 +7,19 @@ import {
   useMatch,
   useNavigate,
 } from 'react-router-dom'
+import { Container, AppBar, Toolbar, Button } from '@mui/material'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
 import Blog from './components/Blog'
+import AppNotification from './components/AppNotification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState({
-    message: null,
-    isError: false,
-  })
+  const [notification, setNotification] = useState(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -39,8 +38,6 @@ const App = () => {
     }
   }, [])
 
-  const blogFormRef = useRef()
-
   const handleLogin = async (userObject) => {
     try {
       const user = await loginService.login(userObject)
@@ -50,19 +47,19 @@ const App = () => {
       setUser(user)
 
       setNotification({
-        message: 'Successfully Logged in',
-        isError: false,
+        text: 'Successfully Logged in',
+        type: 'success',
       })
       setTimeout(() => {
-        setNotification({ message: null, isError: false })
+        setNotification(null)
       }, 5000)
     } catch {
       setNotification({
-        message: 'Wrong credentials',
-        isError: true,
+        text: 'Wrong credentials',
+        type: 'error',
       })
       setTimeout(() => {
-        setNotification({ message: null, isError: false })
+        setNotification(null)
       }, 5000)
     }
   }
@@ -73,11 +70,11 @@ const App = () => {
     blogService.setToken(null)
 
     setNotification({
-      message: 'Successfully Logged out',
-      isError: false,
+      text: 'Successfully Logged out',
+      type: 'success',
     })
     setTimeout(() => {
-      setNotification({ message: null, isError: false })
+      setNotification(null)
     }, 5000)
   }
 
@@ -88,20 +85,20 @@ const App = () => {
       setBlogs(blogs.concat(returnedBlog))
       navigate('/')
       setNotification({
-        message: `A new blog "${returnedBlog.title}" by "${returnedBlog.author}" added!`,
-        isError: false,
+        text: `A new blog "${returnedBlog.title}" by "${returnedBlog.author}" added!`,
+        type: 'success',
       })
 
       setTimeout(() => {
-        setNotification({ message: null, isError: false })
+        setNotification(null)
       }, 5000)
     } catch (error) {
       setNotification({
-        message: `${error}`,
-        isError: true,
+        text: `${error}`,
+        type: 'error',
       })
       setTimeout(() => {
-        setNotification({ message: null, isError: false })
+        setNotification(null)
       }, 5000)
     }
   }
@@ -111,19 +108,19 @@ const App = () => {
       const response = await blogService.update(id, newBlog)
       setBlogs(blogs.map((blog) => (blog.id !== id ? blog : response.data)))
       setNotification({
-        message: 'Successfully Liked the blog!',
-        isError: false,
+        text: 'Successfully Liked the blog!',
+        type: 'success',
       })
       setTimeout(() => {
-        setNotification({ message: null, isError: false })
+        setNotification(null)
       }, 5000)
     } catch (error) {
       setNotification({
-        message: error,
-        isError: true,
+        text: error,
+        type: 'error',
       })
       setTimeout(() => {
-        setNotification({ message: null, isError: false })
+        setNotification(null)
       }, 5000)
     }
   }
@@ -134,52 +131,61 @@ const App = () => {
       setBlogs(blogs.filter((blog) => blog.id !== id))
 
       setNotification({
-        message: `Blog successfully deleted`,
-        isError: false,
+        text: `Blog successfully deleted`,
+        type: 'success',
       })
 
       setTimeout(() => {
-        setNotification({ message: null, isError: false })
+        setNotification(null)
       }, 5000)
     } catch (error) {
       setNotification({
-        message: `${error}`,
-        isError: true,
+        text: `${error}`,
+        type: 'error',
       })
       setTimeout(() => {
-        setNotification({ message: null, isError: false })
+        setNotification(null)
       }, 5000)
     }
-  }
-
-  const padding = {
-    padding: 5,
   }
 
   const match = useMatch('/blogs/:id')
   const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
 
   return (
-    <div>
-      <div>
-        <Link style={padding} to="/">
-          blogs
-        </Link>
-        {user ? (
-          <>
-            <Link style={padding} to="/create">
-              new blog
-            </Link>
-            <button style={padding} onClick={handleLogout}>
-              logout
-            </button>
-          </>
-        ) : (
-          <Link style={padding} to="/login">
-            login
-          </Link>
-        )}
-      </div>
+    <Container>
+      <AppBar
+        position="static"
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0.5rem 1rem',
+        }}
+      >
+        <h2>Blog App</h2>
+        <Toolbar>
+          <Button color="inherit" component={Link} to="/">
+            blogs
+          </Button>
+          {user ? (
+            <>
+              <Button color="inherit" component={Link} to="/create">
+                new blog
+              </Button>
+              <Button variant="outlined" color="inherit" onClick={handleLogout}>
+                logout
+              </Button>
+            </>
+          ) : (
+            <Button color="inherit" component={Link} to="/login">
+              login
+            </Button>
+          )}
+        </Toolbar>
+      </AppBar>
+      <AppNotification notification={notification} />
       <Routes>
         <Route path="/" element={<BlogList blogs={blogs} />} />
         <Route
@@ -218,7 +224,7 @@ const App = () => {
           }
         />
       </Routes>
-    </div>
+    </Container>
   )
 }
 export default App
