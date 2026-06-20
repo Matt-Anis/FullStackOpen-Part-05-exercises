@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { Card, CardContent, Typography, Button } from '@mui/material'
 
 const Blog = ({ user, blog, like, deleteBlog }) => {
   const handleLike = async () => {
@@ -13,20 +13,27 @@ const Blog = ({ user, blog, like, deleteBlog }) => {
   }
 
   return (
-    <div data-testid="blog-container">
-      <h2>{blog.title}</h2>
-      <p>
-        <a href={blog.url} target="_blank" rel="noopener noreferrer">
-          {blog.url}
-        </a>
-      </p>
-      Likes: {blog.likes}
-      {user && <button onClick={handleLike}>Like</button>}
-      <p>{blog.author}</p>
-      {user?.username === blog?.user?.username && (
-        <button onClick={handleDeleteBlog}>Remove</button>
-      )}
-    </div>
+    <Card data-testid="blog-container">
+      <CardContent>
+        <Typography variant="h4">{blog.title}</Typography>
+        <Typography variant="body" color="textSecondary">
+          <a href={blog.url} target="_blank" rel="noopener noreferrer">
+            {blog.url}
+          </a>
+        </Typography>
+        <Typography variant="body2">by: {blog.author}</Typography>
+        <Typography variant="body2">Likes: {blog.likes}</Typography>
+        {user && <Button onClick={handleLike}>Like</Button>}
+        <Typography variant="body2">
+          Added by: {blog?.user?.username}
+        </Typography>
+        {user?.username === blog?.user?.username && (
+          <Button onClick={handleDeleteBlog} color="error">
+            Remove
+          </Button>
+        )}
+      </CardContent>
+    </Card>
   )
 }
 
