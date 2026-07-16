@@ -65,7 +65,7 @@ jobs:
           DEFAULT_BUMP: patch
 
   discord_notification:
-    needs: [Build_and_test, Deploy, Tag_Release]
+    needs: [Deploy]
     runs-on: ubuntu-latest
     steps:
       - uses: sarisia/actions-status-discord@v1
