@@ -31,6 +31,7 @@ jobs:
       - name: Run Playwright tests
         run: npm test
         env:
+          PORT: ${{ secrets.PORT }}
           TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
           SECRET: ${{ secrets.SECRET }}
       - uses: actions/upload-artifact@v4
